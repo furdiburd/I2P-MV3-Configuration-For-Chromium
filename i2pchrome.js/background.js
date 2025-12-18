@@ -38,27 +38,22 @@ function isRouterHost(url) {
   return r;
 }
 
-chrome.webRequest.onBeforeRequest.addListener(
-  function (details) {
-    let localhost = isLocalHost(details.url);
-    let routerhost = isRouterHost(details.url);
-    console.log("localhost: ", localhost, "routerhost: ", routerhost);
-    if (localhost) {
-      if (!routerhost) {
-        return { cancel: true };
-      }
-    }
-  },
-  { urls: ["<all_urls>"] }
-);
-
 function setupBrowsingGroup(groupid){
-	chrome.tabGroup.update(groupid, {color: "yellow", title: "I2P Browsing"})
+	if (groupid && chrome.tabGroups) {
+		chrome.tabGroups.update(groupid, {color: "yellow", title: "I2P Browsing"}).catch(err => {
+			console.log("Tab group update failed:", err);
+		});
+	}
 }
 
 chrome.webRequest.onBeforeRequest.addListener(
   function(details) { 
-	chrome.tabs.group({tabIds: details.tabId}, setupBrowsingGroup)
+	if (typeof details.tabId !== 'number' || details.tabId < 0) {
+	  return;
+	}
+	if (chrome.tabs.group) {
+		chrome.tabs.group({tabIds: [details.tabId]}, setupBrowsingGroup);
+	}
 	console.log(details);
 	return ;//{cancel: true}; 
 	},

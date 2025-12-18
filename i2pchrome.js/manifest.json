@@ -1,4 +1,12 @@
 {
+  "manifest_version": 3,
+  "name": "__MSG_extensionName__",
+  "version": "1.28",
+  "description": "__MSG_extensionDescription__",
+  "homepage_url": "https://github.com/furdiburd/I2P-MV3-Configuration-For-Chromium",
+  "icons": {
+    "48": "icons/toopie.png"
+  },
   "permissions": [
     "browsingData",
     "notifications",
@@ -6,34 +14,32 @@
     "privacy",
     "storage",
     "webRequest",
-    "webRequestBlocking",
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
     "*://127.0.0.1/*",
     "*://localhost/*",
     "<all_urls>"
   ],
-  "manifest_version": 2,
-  "name": "__MSG_extensionName__",
-  "version": "1.28",
-  "description": "__MSG_extensionDescription__",
-  "homepage_url": "https://github.com/eyedeekay/I2P-Configuration-For-Chromium",
-  "icons": {
-    "48": "icons/toopie.png"
-  },
-  "browser_action": {
-    "browser_style": true,
+  "action": {
     "default_icon": "icons/toopie.png",
     "default_title": "__MSG_extensionName__",
     "default_popup": "window.html"
   },
   "options_ui": {
-    "page": "options/options.html"
+    "page": "options/options.html",
+    "open_in_tab": true
   },
   "background": {
-    "scripts": [
-      "background.js",
-      "proxy.js",
-      "info.js",
-      "privacy.js"
+    "service_worker": "service-worker.js"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "dnr-rules.json"
+      }
     ]
   },
   "default_locale": "en"
